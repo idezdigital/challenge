@@ -6,6 +6,7 @@ use App\Model\User;
 use App\Model\Account;
 use Illuminate\Http\Request;
 use App\Response\BaseResponse;
+use App\Http\Resources\UserResource;
 
 class UserController extends Controller
 {
@@ -14,11 +15,11 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
 
-        $user = User::all();
-        return $user;
+        $users = User::all();
+        return UserResource::collection($users);
     }
 
     /**
@@ -55,17 +56,22 @@ class UserController extends Controller
      * @param  \App\Model\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show($user)
+    public function show(Request $user, $id)
     {
 
-        return User::find($user);
+
+        $user = User::findOrfail($id);
+        $userResource = new UserResource($user, true);
+        return $userResource;
     }
 
     public function showLike($key)
     {
-        return  User::query()
+        $user =  User::query()
             ->where('name', 'LIKE', "{$key}%")
             ->get();
+
+        return UserResource::collection($user);
     }
 
     /**

@@ -10,7 +10,7 @@ class User extends Model
 
     protected $fillable = ['name', 'razao_social', 'nome_fantasia', 'email', 'cpf', 'phone', 'password'];
 
-    public function Accounts()
+    public function accounts()
     {
         return $this->hasMany('App\Model\Account');
     }

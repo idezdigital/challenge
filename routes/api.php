@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/user/get/{key}', [App\Http\Controllers\UserController::class, 'showLike']);
-Route::apiResource('user', UserController::class);
 
-Route::resource('user.accounts', AccountController::class)->shallow();
+Route::apiResources([
+    'user' => UserController::class,
+    'account' => AccountController::class,
+]);

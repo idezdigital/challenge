@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Model\Account;
 use App\Model\User;
 use Illuminate\Http\Request;
+use App\Response\BaseResponse;
+use Illuminate\Support\Str;
+use App\Http\Resources\AccountResource;
 
 class AccountController extends Controller
 {
@@ -36,9 +39,23 @@ class AccountController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $account)
     {
-        //
+        try {
+
+            $resp = Account::create([
+                'agencia' => $account->agencia,
+                'numero' => $account->numero,
+                'digito' => $account->digito,
+                'tipo_conta' => Str::upper($account->tipo_conta),
+                'user_id' => $account->user_id,
+            ]);
+
+            return BaseResponse::success(['data' => $resp]);
+        } catch (\Exception $e) {
+
+            return BaseResponse::error([], $e);
+        }
     }
 
     /**
@@ -47,9 +64,13 @@ class AccountController extends Controller
      * @param  \App\Model\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function show(Account $account)
+    public function show(Request $account, $id)
     {
-        //
+        //dd($account);
+        $account = Account::findOrFail($id);
+        $accountResource = new AccountResource($account, false);
+
+        return $accountResource;
     }
 
     /**
