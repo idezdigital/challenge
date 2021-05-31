@@ -25,7 +25,7 @@ class BaseResponse
     }
 
     /**
-     * success
+     * error
      *
      * @param array $data ["success" => true, "error" => 0, "msg" => "Sucesso", "data" => null]
      * @return void
@@ -39,10 +39,5 @@ class BaseResponse
         $data = array_merge($default, $data);
 
         return response()->error($data);
-    }
-
-    public function teste()
-    {
-        echo "teste";
     }
 }

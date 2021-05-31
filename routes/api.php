@@ -16,15 +16,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-
-
-Route::get('/user/get/{key}', [App\Http\Controllers\UserController::class, 'showLike']);
+Route::get('/user/get/{key}', [App\Http\Controllers\UserController::class, 'showLikeName']);
+Route::get('/user/getdoc/{key}', [App\Http\Controllers\UserController::class, 'showDocument']);
 
 Route::apiResources([
     'user' => UserController::class,
     'account' => AccountController::class,
+    'transaction' => TransactionController::class
 ]);

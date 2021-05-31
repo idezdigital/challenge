@@ -19,7 +19,7 @@ class UserController extends Controller
     {
 
         $users = User::all();
-        return UserResource::collection($users);
+        return $users;
     }
 
     /**
@@ -56,19 +56,39 @@ class UserController extends Controller
      * @param  \App\Model\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $user, $id)
+    public function show($id)
     {
-
-
         $user = User::findOrfail($id);
         $userResource = new UserResource($user, true);
         return $userResource;
     }
 
-    public function showLike($key)
+    /**
+     * Display the specified resource by name.
+     *
+     * @param  string $key (user name)
+     * @return \App\Http\Resources UserResource
+     */
+    public function showLikeName($key)
     {
         $user =  User::query()
             ->where('name', 'LIKE', "{$key}%")
+            ->get();
+
+        return UserResource::collection($user);
+    }
+
+    /**
+     * Display the specified resource by Document.
+     *
+     * @param  string $key (cpf/cnpj)
+     * @return \App\Http\Resources UserResource
+     */
+    public function showDocument($key)
+    {
+        $user =  User::query()
+            ->where('cpf', $key)
+            ->orWhere('cnpj', $key)
             ->get();
 
         return UserResource::collection($user);

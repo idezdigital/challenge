@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Model\Transaction;
 use Illuminate\Http\Request;
+use App\Response\BaseResponse;
 
 class TransactionController extends Controller
 {
@@ -14,7 +15,8 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        //
+        $users = Transaction::all();
+        return $users;
     }
 
     /**
@@ -35,7 +37,14 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+
+            $resp = Transaction::create($request->all());
+            return BaseResponse::success(['data' => $resp]);
+        } catch (\Exception $e) {
+
+            return BaseResponse::error([], $e);
+        }
     }
 
     /**

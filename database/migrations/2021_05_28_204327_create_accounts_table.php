@@ -15,10 +15,10 @@ class CreateAccountsTable extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
-            $table->string('agencia', 50);
-            $table->integer('numero');
-            $table->integer('digito');
-            $table->string('tipo_conta', 50);
+            $table->integer('bank_branch');
+            $table->integer('account_number');
+            $table->integer('digit');
+            $table->string('account_type', 50);
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');

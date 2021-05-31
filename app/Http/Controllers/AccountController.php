@@ -43,15 +43,29 @@ class AccountController extends Controller
     {
         try {
 
-            $resp = Account::create([
-                'agencia' => $account->agencia,
-                'numero' => $account->numero,
-                'digito' => $account->digito,
-                'tipo_conta' => Str::upper($account->tipo_conta),
-                'user_id' => $account->user_id,
-            ]);
+            $chk = Account::query()
+                ->where('user_id', '=', $account->user_id)
+                ->where(Str::upper('account_type'), '=', Str::upper($account->account_type))
+                ->exists();
 
-            return BaseResponse::success(['data' => $resp]);
+            if ($chk == false) {
+                $resp = Account::create([
+                    'bank_branch' => $account->bank_branch,
+                    'account_number' => $account->account_number,
+                    'digit' => $account->digit,
+                    'account_type' => Str::upper($account->account_type),
+                    'user_id' => $account->user_id,
+                ]);
+                return BaseResponse::success(['data' => $resp]);
+            }
+
+            $msg = [
+                "user_id" => $account->user_id,
+                "account_type" => Str::upper($account->account_type),
+                "msg" => "account_type already married to the user"
+            ];
+
+            return response()->json([$msg], 500);
         } catch (\Exception $e) {
 
             return BaseResponse::error([], $e);

@@ -16,7 +16,6 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        //return parent::toArray($request);
 
         return [
             'id' => $this->id,
@@ -24,16 +23,19 @@ class UserResource extends JsonResource
             'cpf' => $this->cpf,
             'telephone' => $this->phone,
             'email' => $this->email,
-            'accounts' => $this->details()
+            'accounts' => $this->accountComplement()
         ];
-        // $data[] = AccountResource::collection($this->accounts);
-
-        // return $data;
     }
 
-    private function details(): array
+    /**
+     * Sets the additional account information.
+     *
+     * 
+     * @return object
+     */
+    private function accountComplement(): object
     {
-        $data[] = AccountResource::collection($this->accounts);
+        $data = Account::where('user_id', $this->id)->get();
 
         return $data;
     }
